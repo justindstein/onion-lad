@@ -11,7 +11,12 @@ public class MoveController : MonoBehaviour
     [SerializeField] private float jumpForce;
 
     private float xInput; // Does not appear in inspector
-    
+
+    [Header("Collision Check")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius;
+    [SerializeField] private LayerMask whatIsGround;
+    private bool isGrounded;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +28,8 @@ public class MoveController : MonoBehaviour
     // FPS can vary
     void Update()
     {
-        xInput = Input.GetAxisRaw("Horizontal");
+        CollisionChecks();
+        xInput = Input.GetAxisRaw("Horizontal"); // versus Input = Input.GetAxis("Horizontal");
         Movement();
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -34,7 +40,8 @@ public class MoveController : MonoBehaviour
 
     private void Jump()
     {
-        rb.velocity = new Vector2(xInput * moveSpeed, jumpForce);
+        if(isGrounded)
+            rb.velocity = new Vector2(xInput * moveSpeed, jumpForce);
     }
 
     private void Movement()
@@ -61,5 +68,19 @@ public class MoveController : MonoBehaviour
         //{
         //    Debug.Log("Space was released");
         //}
+    }
+
+
+    // Draw a wireframe around 'groundCheck' to aid us in visualizing isGrounded check. This is a visual cue only,
+    // // is not actually used for decision-making.
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
+
+    // Checks if there is an overlap between groundCheck circle with 'Ground' layer living in the platform.
+    private void CollisionChecks()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
     }
 }
