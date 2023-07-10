@@ -5,7 +5,8 @@ using UnityEngine;
 public class MoveController : MonoBehaviour
 {
     //public Rigidbody2D rb; // Shows up in inspector and is editable
-    public Rigidbody2D rb;
+    private Rigidbody2D rb;
+    private Animator anim;
 
     [SerializeField] private float moveSpeed; // Shows up in inspector but other scripts won't be able to access it
     [SerializeField] private float jumpForce;
@@ -22,12 +23,15 @@ public class MoveController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>(); // Retrieving field without clicking and dragging in inspector UI
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame / 60 fps -> 60 updates per second, 120 fps -> 120 updates per second
     // FPS can vary
     void Update()
     {
+        AnimationController();
+
         CollisionChecks();
         xInput = Input.GetAxisRaw("Horizontal"); // versus Input = Input.GetAxis("Horizontal");
         Movement();
@@ -36,6 +40,12 @@ public class MoveController : MonoBehaviour
         {
             Jump();
         }
+    }
+
+    private void AnimationController()
+    {
+        bool isMoving = (rb.velocity.x != 0); // || (!isGrounded); // TODO: player is going into idle state when jumping vertically
+        anim.SetBool("isMoving", isMoving);
     }
 
     private void Jump()
