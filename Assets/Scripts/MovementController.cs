@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveController : MonoBehaviour
+public class MovementController : MonoBehaviour
 {
     private Rigidbody2D rigidBody;
     private Animator animator;
@@ -19,11 +19,11 @@ public class MoveController : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpSpeed;
 
-    void Start()
+    void Awake()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        this.rigidBody = GetComponent<Rigidbody2D>();
+        this.animator = GetComponent<Animator>();
+        this.spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -33,7 +33,7 @@ public class MoveController : MonoBehaviour
 
         // Flip player sprite if player is not facing right
         this.isFacingRight = CalculateIsFacingRight(this.isFacingRight, xInput);
-        spriteRenderer.flipX = (!isFacingRight);
+        this.spriteRenderer.flipX = (!isFacingRight);
 
         SetAnimationParameters(this.rigidBody.velocity.x, this.rigidBody.velocity.y, isGrounded);
     }
