@@ -360,13 +360,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff43fd7f91594ce69e868ad424e7a90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 6
   groundCheck: {fileID: 773059449}
   groundCheckRadius: 0.2
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  movementSpeed: 4
+  jumpSpeed: 5
 --- !u!70 &1157927018
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
