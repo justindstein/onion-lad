@@ -360,7 +360,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff43fd7f91594ce69e868ad424e7a90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMoving: 0
   moveSpeed: 5
   jumpForce: 6
   groundCheck: {fileID: 773059449}

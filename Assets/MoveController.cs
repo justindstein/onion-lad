@@ -7,6 +7,7 @@ public class MoveController : MonoBehaviour
     //public Rigidbody2D rb; // Shows up in inspector and is editable
     private Rigidbody2D rb;
     private Animator anim;
+    private SpriteRenderer sr;
 
     [SerializeField] private float moveSpeed; // Shows up in inspector but other scripts won't be able to access it
     [SerializeField] private float jumpForce;
@@ -18,19 +19,22 @@ public class MoveController : MonoBehaviour
     [SerializeField] private float groundCheckRadius;
     [SerializeField] private LayerMask whatIsGround;
     private bool isGrounded;
+    private bool facingRight = true;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>(); // Retrieving field without clicking and dragging in inspector UI
         anim = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame / 60 fps -> 60 updates per second, 120 fps -> 120 updates per second
     // FPS can vary
     void Update()
     {
-        AnimationController();
+        AnimationController(); // TODO: this should happen after everything else, isGrounded
+        FlipController();
 
         CollisionChecks();
         xInput = Input.GetAxisRaw("Horizontal"); // versus Input = Input.GetAxis("Horizontal");
@@ -44,8 +48,18 @@ public class MoveController : MonoBehaviour
 
     private void AnimationController()
     {
-        bool isMoving = (rb.velocity.x != 0); // || (!isGrounded); // TODO: player is going into idle state when jumping vertically
-        anim.SetBool("isMoving", isMoving);
+        anim.SetFloat("xVelocity", rb.velocity.x);
+        anim.SetFloat("yVelocity", rb.velocity.y);
+        anim.SetBool("isGrounded", isGrounded);
+    }
+
+    private void FlipController()
+    {
+        if (xInput != 0)
+            facingRight = (xInput > 0);
+
+        //transform.Rotate(0, 180, 0);
+        sr.flipX = (!facingRight);
     }
 
     private void Jump()
